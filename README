@@ -1,0 +1,20 @@
+## Virtual environment 
+<u>__With scripts in .zshrc__</u>
+
+activate venv - `workon arthur_api`
+
+deactivate venv - `deactivate arthur_api`
+
+<u>__No scripts__</u>
+
+`python3 -m venv ~/.venv/arthur_api`
+
+`source ~/.venv/arthur_api/bin/activate`
+
+## Dependencies
+To install dependencies run `pip install -r requirements.txt`
+
+To add dependencies, add name of package to `requirements.txt` and then run the above command
+
+## Running
+To run use `flask run`
