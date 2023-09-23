@@ -1,3 +1,5 @@
 flask
 flask-sock
 Werkzeug
+RPi.GPIO
+picamera
