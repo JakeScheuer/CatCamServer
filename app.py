@@ -1,19 +1,25 @@
 from flask import Flask
+from flask_sock import Sock
 
 app = Flask(__name__)
+sock = Sock(app)
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+@sock.route('/camera_feed')
+def feed(ws):
+    while True:
+        ws.send("video stream")
 
-@app.route("/camera_feed")
-def get_feed():
-    return "feed data"
+@sock.route('/camera_controls')
+def camera_controls(ws):
+    while True:
+        command = ws.receive()
+        ws.send(f'Camera move {command}')
 
-@app.route("/camera_controls")
-def control_camera():
-    return "camera controls"
+@sock.route('/laser_controls')
+def laser_command(ws):
+    while True:
+        command = ws.receive()
+        ws.send(f'Laser move {command}')
 
-@app.route("/laser_controls")
-def control_laser():
-    return "laser controls"
+if __name__ == '__main__':
+    socketio.run(app)

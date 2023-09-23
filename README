@@ -18,3 +18,6 @@ To add dependencies, add name of package to `requirements.txt` and then run the 
 
 ## Running
 To run use `flask run`
+
+(8 client connections)
+`gunicorn -b :5500 --workers 1 threads 4 app`
