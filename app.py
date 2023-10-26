@@ -23,10 +23,10 @@ def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
 
 def move_left(servo):
-    if servo.value > -1: servo.value -= 0.01
+    if servo.value > -1: servo.value -= 0.10 #.01
 
 def move_right(servo):
-    if servo.value < 1: servo.value += 0.01
+    if servo.value < 1: servo.value += 0.10 #.01
 
 # This may not be right...
 def move_for_period(move_function):
@@ -35,13 +35,13 @@ def move_for_period(move_function):
 
 def move_camera(direction):
     if direction == "left":
-        move_for_period(move_left(cam_x))
+        move_left(cam_x)
     elif direction == "right":
-        move_for_period(move_right(cam_x))
+        move_right(cam_x)
     elif direction == "up":
-        move_for_period(move_left(cam_y))
+        move_left(cam_y)
     elif direction == "down":
-        move_for_period(move_right(cam_y))
+        move_right(cam_y)
 
 def cord_to_pos(val):
     # 0 -> -1
