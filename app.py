@@ -16,29 +16,29 @@ cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
 laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90)
 laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
 
-def toggle_laser(turnOn):
-    laser.on() if turnOn else laser.off()
+# def toggle_laser(turnOn):
+#     laser.on() if turnOn else laser.off()
 
-def move_left(servo):
-    if servo.angle > -90: servo.angle -= 10
+# def move_left(servo):
+#     if servo.angle > -90: servo.angle -= 10
 
-def move_right(servo):
-    if servo.angle < 90: servo.angle += 10
+# def move_right(servo):
+#     if servo.angle < 90: servo.angle += 10
 
 # This may not be right...
-def move_for_period(move_function):
-    for x in range(20):
-        move_function()
+# def move_for_period(move_function):
+#     for x in range(20):
+#         move_function()
 
-def move_camera(direction):
-    if direction == "left":
-        move_left(cam_x)
-    elif direction == "right":
-        move_right(cam_x)
-    elif direction == "up":
-        move_left(cam_y)
-    elif direction == "down":
-        move_right(cam_y)
+# def move_camera(direction):
+#     if direction == "left":
+#         move_left(cam_x)
+#     elif direction == "right":
+#         move_right(cam_x)
+#     elif direction == "up":
+#         move_left(cam_y)
+#     elif direction == "down":
+#         move_right(cam_y)
 
 def cord_to_angle(val):
     # 0 -> -1
@@ -51,10 +51,10 @@ def cord_to_angle(val):
     return round(angle)
 
 # vals are 0-100
-def move_laser(x, y):
-    laser_x.angle = cord_to_angle(x)
-    laser_y.angle = cord_to_angle(y)
-    time.sleep(0.1)
+# def move_laser(x, y):
+#     laser_x.angle = cord_to_angle(x)
+#     laser_y.angle = cord_to_angle(y)
+#     time.sleep(0.1)
 
 def safe_close():
     print("Cleaning up...")
