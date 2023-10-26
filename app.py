@@ -90,12 +90,9 @@ def video_feed():
 
 # laser: on, off
 # cam: left, right, up, down
-# move: x:180 y:10
+# move: x:100 y:10
 @sock.route('/controls')
 def controls(ws):
-    global cam_x_angle = 0
-    global cam_y_angle = 0
-
     while True:
         command = ws.receive()
         args = command.split(" ")
