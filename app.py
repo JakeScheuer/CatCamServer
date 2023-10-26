@@ -1,6 +1,7 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
+from gpiozero.pins.pigpio import PiGPIOFactory
 from gpiozero import LED, AngularServo
 import time
 
@@ -10,10 +11,11 @@ import time
 # CAM_Y_SERVO_PIN = 15
 # LASER_X_SERVO_PIN = 11
 # LASER_Y_SERVO_PIN = 12
+factory = PiGPIOFactory()
 laser = LED("BOARD13")
 # cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
 # cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
-laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90)
+laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90, pin_factory=factory)
 # laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
 
 # def toggle_laser(turnOn):
