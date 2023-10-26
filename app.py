@@ -10,9 +10,6 @@ import time
 # CAM_Y_SERVO_PIN = 15
 # LASER_X_SERVO_PIN = 11
 # LASER_Y_SERVO_PIN = 12
-
-xxx = 0.4/1000
-yyy = 2.5/1000
 laser = LED("BOARD13")
 cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
 cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
@@ -117,5 +114,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     
-    finally:
-        safe_close()
+    # finally:
+    #     safe_close()
