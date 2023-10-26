@@ -7,7 +7,7 @@ deactivate venv - `deactivate arthur_api`
 
 <u>__No scripts__</u>
 
-`python3 -m venv ~/.venv/arthur_api`
+`python -m venv ~/.venv/arthur_api`
 
 `source ~/.venv/arthur_api/bin/activate`
 

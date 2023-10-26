@@ -5,10 +5,10 @@ import RPi.GPIO as GPIO
 import time
 
 LASER_PIN = 13
-CAM_X_SERVO_PIN = 11
-CAM_Y_SERVO_PIN = 12
-LASER_X_SERVO_PIN = 15
-LASER_Y_SERVO_PIN = 16
+CAM_X_SERVO_PIN = 16
+CAM_Y_SERVO_PIN = 15
+LASER_X_SERVO_PIN = 11
+LASER_Y_SERVO_PIN = 12
 FREQUENCY_HTZ = 50
 
 GPIO.setmode(GPIO.BOARD)
@@ -53,6 +53,32 @@ def move_laser(x_val, y_val):
     laser_x_servo.ChangeDutyCycle(0)
     laser_y_servo.ChangeDutyCycle(0)
 
+ def move_camera(direction):
+    if direction == "left":
+        if cam_x_angle < 180:
+            cam_x_angle += 10
+            cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
+            time.sleep(0.5)
+            cam_x_servo.ChangeDutyCycle(0)
+    elif direction == "right":
+        if cam_x_angle > 0:
+            cam_x_angle -= 10
+            cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
+            time.sleep(0.5)
+            cam_x_servo.ChangeDutyCycle(0)
+    elif direction == "up":
+        if cam_y_angle < 180:
+            cam_y_angle += 10
+            cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
+            time.sleep(0.5)
+            cam_y_servo.ChangeDutyCycle(0)
+    elif direction == "left":
+        if cam_y_angle > 0:
+            cam_y_angle -= 10
+            cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
+            time.sleep(0.5)
+            cam_y_servo.ChangeDutyCycle(0)
+
 @app.route('/')
 def index():
     return 'Hello There!!!'
@@ -61,51 +87,27 @@ def index():
 def video_feed():
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundry=frame')
 
-@sock.route('/camera_controls')
-def camera_controls(ws):
-    global cam_x_angle
-    global cam_y_angle
+# laser: on, off
+# cam: left, right, up, down
+# move: x:180 y:10
+@sock.route('/controls')
+def controls(ws):
+    global cam_x_angle = 0
+    global cam_y_angle = 0
 
     while True:
         command = ws.receive()
-        p_command = command.split(" ")[1] #ex: "cam: left"
-        if p_command == "left":
-            if cam_x_angle < 180:
-                cam_x_angle += 10
-                cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
-                time.sleep(0.5)
-                cam_x_servo.ChangeDutyCycle(0)
-        if p_command == "right":
-            if cam_x_angle > 0:
-                cam_x_angle -= 10
-                cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
-                time.sleep(0.5)
-                cam_x_servo.ChangeDutyCycle(0)
-        if p_command == "up":
-            if cam_y_angle < 180:
-                cam_y_angle += 10
-                cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
-                time.sleep(0.5)
-                cam_y_servo.ChangeDutyCycle(0)
-        if p_command == "left":
-            if cam_y_angle > 0:
-                cam_y_angle -= 10
-                cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
-                time.sleep(0.5)
-                cam_y_servo.ChangeDutyCycle(0)
-
-@sock.route('/laser_controls')
-def laser_command(ws):
-    while True:
-        command = ws.receive()
-        if command == "turn off":
-            toggle_laser(False)
-        elif command == "turn on":
-            toggle_laser(True)
-        elif command[0:4] == "move": #ex: "move: x:120 y:10"
-            vals = command.split(":")
-            x_val = vals[1].split(" ")[0]
-            y_val = vals[2]
+        args = command.split(" ")
+        device = args[0]
+        if device == "laser:":
+            is_on = args[1] == "on"
+            toggle_laser(is_on)
+        elif device == "cam:":
+            direction = args[1]
+            move_camera(direction)
+        elif device == "move:":
+            x_val = args[1].split(":")[1]
+            y_val = args[2].split(":")[1]
             move_laser(float(x_val), float(y_val))
 
 if __name__ == '__main__':
@@ -113,7 +115,7 @@ if __name__ == '__main__':
         socketio.run(app)
     
     except KeyboardInterrupt:
-        pass
+        continue
     
     finally:
         cam_x_servo.stop()
