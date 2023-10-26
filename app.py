@@ -11,10 +11,10 @@ import time
 # LASER_X_SERVO_PIN = 11
 # LASER_Y_SERVO_PIN = 12
 laser = LED("BOARD13")
-cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
-cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
+# cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
+# cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
 laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90)
-laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
+# laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
 
 # def toggle_laser(turnOn):
 #     laser.on() if turnOn else laser.off()
