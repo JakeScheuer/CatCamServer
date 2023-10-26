@@ -1,83 +1,84 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
-import RPi.GPIO as GPIO
+from gpiozero import LED, Servo
 import time
 
-LASER_PIN = 13
-CAM_X_SERVO_PIN = 16
-CAM_Y_SERVO_PIN = 15
-LASER_X_SERVO_PIN = 11
-LASER_Y_SERVO_PIN = 12
-FREQUENCY_HTZ = 50
+# Just for reference...
+# LASER_PIN = 13
+# CAM_X_SERVO_PIN = 16
+# CAM_Y_SERVO_PIN = 15
+# LASER_X_SERVO_PIN = 11
+# LASER_Y_SERVO_PIN = 12
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(LASER_PIN, GPIO.OUT)
-GPIO.setup(CAM_X_SERVO_PIN, GPIO.OUT)
-GPIO.setup(CAM_Y_SERVO_PIN, GPIO.OUT)
-GPIO.setup(LASER_X_SERVO_PIN, GPIO.OUT)
-GPIO.setup(LASER_Y_SERVO_PIN, GPIO.OUT)
+xxx = 0.4/1000
+yyy = 2.5/1000
+laser = LED("BOARD13")
+cam_x = Servo("BOARD16",min_pulse_width=xxx,max_pulse_width=yyy)
+cam_y = Servo("BOARD15",min_pulse_width=xxx,max_pulse_width=yyy)
+laser_x = Servo("BOARD11",min_pulse_width=xxx,max_pulse_width=yyy)
+laser_y = Servo("BOARD12",min_pulse_width=xxx,max_pulse_width=yyy)
 
-cam_x_servo = GPIO.PWM(CAM_X_SERVO_PIN, FREQUENCY_HTZ)
-cam_y_servo = GPIO.PWM(CAM_Y_SERVO_PIN, FREQUENCY_HTZ)
-laser_x_servo = GPIO.PWM(LASER_X_SERVO_PIN, FREQUENCY_HTZ)
-laser_y_servo = GPIO.PWM(LASER_Y_SERVO_PIN, FREQUENCY_HTZ)
+def toggle_laser(turnOn):
+    laser.on() if turnOn else laser.off()
 
-cam_x_servo.start(0)
-cam_y_servo.start(0)
-laser_x_servo.start(0)
-laser_y_servo.start(0)
+def move_left(servo):
+    if servo.value > -1: servo.value -= 0.01
+
+def move_right(servo):
+    if servo.value < 1: servo.value += 0.01
+
+# This may not be right...
+def move_for_period(move_function):
+    for x in range(20):
+        move_function()
+
+def move_camera(direction):
+    if direction == "left":
+        move_for_period(move_left(cam_x))
+    elif direction == "right":
+        move_for_period(move_right(cam_x))
+    elif direction == "up":
+        move_for_period(move_left(cam_y))
+    elif direction == "down":
+        move_for_period(move_right(cam_y))
+
+def cord_to_pos(val):
+    # 0 -> -1
+    # 25 -> -0.5
+    # 50 -> 0
+    # 75 -> 0.5 
+    # 100 -> 1
+    return round(((val * 2)/100) - 1)
+
+# vals are 0-100
+def move_laser(x, y):
+    laser_x.value = cord_to_pos(x)
+    laser_y.value = cord_to_pos(y)
+    time.sleep(0.1)
+
+def safe_close():
+    print("Cleaning up...")
+    cam_x.mid()
+    cam_y.mid()
+    laser_x.mid()
+    laser_y.mid()
+    sleep(1)
+    cam_x.close()
+    cam_y.close()
+    laser_x.close()
+    laser_y.close()
+    print("Goodbye!")
 
 app = Flask(__name__)
 sock = Sock(app)
 
-global cam_x_angle
-global cam_y_angle
-cam_x_angle = 0
-cam_y_angle = 0
+# def gen(camera):
+#     while True:
+#         frame = camera.get_frame()
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-def toggle_laser(turnOn):
-    pin_setting = GPIO.HIGH if turnOn else GPIO.LOW
-    GPIO.output(LASER_PIN, pin_setting)
-
-def move_laser(x_val, y_val):
-    laser_x_servo.ChangeDutyCycle(2+(x_val/18))
-    laser_y_servo.ChangeDutyCycle(2+(x_val/18))
-    time.sleep(0.2)
-    laser_x_servo.ChangeDutyCycle(0)
-    laser_y_servo.ChangeDutyCycle(0)
-
- def move_camera(direction):
-    if direction == "left":
-        if cam_x_angle < 180:
-            cam_x_angle += 10
-            cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
-            time.sleep(0.5)
-            cam_x_servo.ChangeDutyCycle(0)
-    elif direction == "right":
-        if cam_x_angle > 0:
-            cam_x_angle -= 10
-            cam_x_servo.ChangeDutyCycle(2+(cam_x_angle/18))
-            time.sleep(0.5)
-            cam_x_servo.ChangeDutyCycle(0)
-    elif direction == "up":
-        if cam_y_angle < 180:
-            cam_y_angle += 10
-            cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
-            time.sleep(0.5)
-            cam_y_servo.ChangeDutyCycle(0)
-    elif direction == "left":
-        if cam_y_angle > 0:
-            cam_y_angle -= 10
-            cam_y_servo.ChangeDutyCycle(2+(cam_y_angle/18))
-            time.sleep(0.5)
-            cam_y_servo.ChangeDutyCycle(0)
 
 @app.route('/')
 def index():
@@ -115,13 +116,7 @@ if __name__ == '__main__':
         socketio.run(app)
     
     except KeyboardInterrupt:
-        continue
+        pass
     
     finally:
-        cam_x_servo.stop()
-        cam_y_servo.stop()
-        laser_x_servo.stop()
-        laser_y_servo.stop()
-        GPIO.cleanup()
-        print("Goodbye!")
-        pass
+        safe_close()

@@ -1,6 +1,6 @@
 flask
 flask-sock
 Werkzeug
-RPi.GPIO
+gpiozero
 picamera
 gunicorn
