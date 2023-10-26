@@ -1,7 +1,7 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
-from gpiozero import LED, Servo
+from gpiozero import LED, AngularServo
 import time
 
 # Just for reference...
@@ -14,19 +14,19 @@ import time
 xxx = 0.4/1000
 yyy = 2.5/1000
 laser = LED("BOARD13")
-cam_x = Servo("BOARD16",min_pulse_width=xxx,max_pulse_width=yyy)
-cam_y = Servo("BOARD15",min_pulse_width=xxx,max_pulse_width=yyy)
-laser_x = Servo("BOARD11",min_pulse_width=xxx,max_pulse_width=yyy)
-laser_y = Servo("BOARD12",min_pulse_width=xxx,max_pulse_width=yyy)
+cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
+cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
+laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90)
+laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
 
 def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
 
 def move_left(servo):
-    if servo.value > -1: servo.value -= 0.10 #.01
+    if servo.angle > -90: servo.angle -= 10
 
 def move_right(servo):
-    if servo.value < 1: servo.value += 0.10 #.01
+    if servo.angle < 90: servo.angle += 10
 
 # This may not be right...
 def move_for_period(move_function):
@@ -43,18 +43,20 @@ def move_camera(direction):
     elif direction == "down":
         move_right(cam_y)
 
-def cord_to_pos(val):
+def cord_to_angle(val):
     # 0 -> -1
     # 25 -> -0.5
     # 50 -> 0
     # 75 -> 0.5 
     # 100 -> 1
-    return round(((val * 2)/100) - 1)
+    pval = ((val * 2)/100) - 1
+    angle = pval * 90
+    return round(angle)
 
 # vals are 0-100
 def move_laser(x, y):
-    laser_x.value = cord_to_pos(x)
-    laser_y.value = cord_to_pos(y)
+    laser_x.angle = cord_to_angle(x)
+    laser_y.angle = cord_to_angle(y)
     time.sleep(0.1)
 
 def safe_close():
