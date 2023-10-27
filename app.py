@@ -37,9 +37,9 @@ def move_right(servo):
 
 def move_camera(direction):
     if direction == "left":
-        move_left(laser_y)
+        move_left(laser_x)
     elif direction == "right":
-        move_right(laser_y)
+        move_right(laser_x)
     elif direction == "up":
         move_left(laser_y)
     elif direction == "down":
