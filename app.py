@@ -11,8 +11,8 @@ factory = PiGPIOFactory()
 laser = LED(2)
 cam_x = Servo(23,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 cam_y = Servo(24,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_x = Servo(1, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+# laser_x = Servo(1, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+# laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
 def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
@@ -48,16 +48,16 @@ def cord_to_pos(val):
 
 # vals are 0-100
 def move_laser(x, y):
-    laser_x.value = cord_to_pos(x)
-    laser_y.value = cord_to_pos(y)
+    # laser_x.value = cord_to_pos(x)
+    # laser_y.value = cord_to_pos(y)
     time.sleep(0.1)
 
 def safe_close():
     print("Cleaning up...")
     cam_x.mid()
     cam_y.mid()
-    laser_x.mid()
-    laser_y.mid()
+    # laser_x.mid()
+    # laser_y.mid()
     sleep(1)
     cam_x.close()
     cam_y.close()
