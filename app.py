@@ -14,20 +14,27 @@ laser = LED(2)
 laser_x = Servo("BOARD32", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 laser_y = Servo("BOARD12", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
-def test_servo(servo):
-    servo.min()
+def test_servo():
+    laser_x.min()
     time.sleep(2)
-    servo.mid()
+    laser_x.mid()
     time.sleep(2)
-    servo.max()
+    laser_x.max()
     time.sleep(2)
-    servo.mid()
+    laser_x.mid()
     time.sleep(2)
+
+    laser_y.min()
+    time.sleep(2)
+    laser_y.mid()
+    time.sleep(2)
+    laser_y.max()
+    time.sleep(2)
+    laser_y.mid()
 
 def toggle_laser(turnOn):
     # Just to test...
-    test_servo(laser_x)
-    test_servo(laser_y)
+    test_servo()
     # laser.on() if turnOn else laser.off()
 
 def move_left(servo):
