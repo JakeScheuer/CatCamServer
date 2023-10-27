@@ -8,11 +8,11 @@ import time
 min_p = 0.05/1000
 max_p = 2.5/1000
 factory = PiGPIOFactory()
-laser = LED("BOARD13")
-cam_x = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-cam_y = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_x = Servo("BOARD12",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_y = Servo("BOARD32",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser = LED(2)
+cam_x = Servo(23,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_y = Servo(24,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_x = Servo(1, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
 def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
@@ -108,7 +108,7 @@ if __name__ == '__main__':
         socketio.run(app)
     
     except KeyboardInterrupt:
-        pass
+        safe_close()
     
     finally:
         safe_close()
