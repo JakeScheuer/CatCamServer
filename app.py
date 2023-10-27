@@ -1,8 +1,8 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
+from gpiozero import LED, Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
-from gpiozero import LED, AngularServo
 import time
 
 # Just for reference...
@@ -11,52 +11,53 @@ import time
 # CAM_Y_SERVO_PIN = 15
 # LASER_X_SERVO_PIN = 11
 # LASER_Y_SERVO_PIN = 12
+
+min_p = 0.05/1000
+max_p = 2.5/1000
 factory = PiGPIOFactory()
 laser = LED("BOARD13")
-# cam_x = AngularServo("BOARD16",min_angle=-90, max_angle=90)
-# cam_y = AngularServo("BOARD15",min_angle=-90, max_angle=90)
-laser_x = AngularServo("BOARD11",min_angle=-90, max_angle=90, pin_factory=factory)
-# laser_y = AngularServo("BOARD12",min_angle=-90, max_angle=90)
+cam_x = Servo("BOARD16",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_y = Servo("BOARD15",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_x = Servo("BOARD11",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_y = Servo("BOARD12",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
-# def toggle_laser(turnOn):
-#     laser.on() if turnOn else laser.off()
+def toggle_laser(turnOn):
+    laser.on() if turnOn else laser.off()
 
-# def move_left(servo):
-#     if servo.angle > -90: servo.angle -= 10
+def move_left(servo):
+    if servo.value > -1: servo.value -= 0.01
 
-# def move_right(servo):
-#     if servo.angle < 90: servo.angle += 10
+def move_right(servo):
+    if servo.value < 1: servo.value += 0.01
 
 # This may not be right...
-# def move_for_period(move_function):
-#     for x in range(20):
-#         move_function()
+def move_for_period(move_function):
+    for x in range(20):
+        move_function()
 
-# def move_camera(direction):
-#     if direction == "left":
-#         move_left(cam_x)
-#     elif direction == "right":
-#         move_right(cam_x)
-#     elif direction == "up":
-#         move_left(cam_y)
-#     elif direction == "down":
-#         move_right(cam_y)
+def move_camera(direction):
+    if direction == "left":
+        move_for_period(move_left(cam_x))
+    elif direction == "right":
+        move_for_period(move_right(cam_x))
+    elif direction == "up":
+        move_for_period(move_left(cam_y))
+    elif direction == "down":
+        move_for_period(move_right(cam_y))
 
-def cord_to_angle(val):
+def cord_to_pos(val):
     # 0 -> -1
     # 25 -> -0.5
     # 50 -> 0
     # 75 -> 0.5 
     # 100 -> 1
-    pval = ((val * 2)/100) - 1
-    angle = pval * 90
-    return round(angle)
+    return round(((val * 2)/100) - 1)
 
 # vals are 0-100
-# def move_laser(x, y):
-#     laser_x.angle = cord_to_angle(x)
-#     laser_y.angle = cord_to_angle(y)
-#     time.sleep(0.1)
+def move_laser(x, y):
+    laser_x.value = cord_to_pos(x)
+    laser_y.value = cord_to_pos(y)
+    time.sleep(0.1)
 
 def safe_close():
     print("Cleaning up...")
@@ -116,5 +117,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     
-    # finally:
-    #     safe_close()
+    finally:
+        safe_close()

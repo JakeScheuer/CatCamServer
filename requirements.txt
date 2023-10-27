@@ -1,7 +1,6 @@
 flask
 flask-sock
 Werkzeug
-pigpio
 gpiozero
 picamera
 gunicorn
