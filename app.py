@@ -90,6 +90,7 @@ def video_feed():
 def controls(ws):
     while True:
         command = ws.receive()
+        print(command)
         args = command.split(" ")
         device = args[0]
         if device == "laser:":
