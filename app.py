@@ -17,9 +17,9 @@ def reset_servos():
     # time.sleep(0.2)
     # cam_y.angle = 90
     # time.sleep(0.2)
-    laser_x.angle = 90
+    cam_x.angle = 90
     time.sleep(0.2)
-    laser_y.angle = 90
+    cam_y.angle = 90
     time.sleep(0.2)
 
 def toggle_laser(turnOn):
@@ -28,22 +28,28 @@ def toggle_laser(turnOn):
     # laser.on() if turnOn else laser.off()
 
 def move_right(servo):
-    if servo.angle is None or servo.angle > 0: 
-        servo.angle -= 10
+    if servo.angle is None or servo.angle > 0:
+        try:
+            servo.angle -= 10
+        except ValueError:
+            pass
 
 def move_left(servo):
-    if servo.angle is None or servo.angle < 180: 
-        servo.angle += 10
+    if servo.angle is None or servo.angle < 180:
+        try: 
+            servo.angle += 10
+        except ValueError:
+            pass
 
 def move_camera(direction):
     if direction == "left":
-        move_left(laser_x)
+        move_left(cam_x)
     elif direction == "right":
-        move_right(laser_x)
+        move_right(cam_x)
     elif direction == "up":
-        move_right(laser_y)
+        move_right(cam_y)
     elif direction == "down":
-        move_left(laser_y)
+        move_left(cam_y)
 
 # def cord_to_pos(val):
 #     # 0 -> -1
