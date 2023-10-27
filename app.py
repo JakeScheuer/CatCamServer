@@ -40,7 +40,6 @@ def move_left(servo):
         servo.angle -= 10
 
 def move_right(servo):
-    print(servo.value)
     if servo.angle < 180: 
         servo.angle += 10
 
