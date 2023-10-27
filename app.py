@@ -28,11 +28,11 @@ def toggle_laser(turnOn):
     # laser.on() if turnOn else laser.off()
 
 def move_right(servo):
-    if servo.angle > 0: 
+    if servo.angle is None or servo.angle > 0: 
         servo.angle -= 10
 
 def move_left(servo):
-    if servo.angle < 180: 
+    if servo.angle is None or servo.angle < 180: 
         servo.angle += 10
 
 def move_camera(direction):
