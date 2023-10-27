@@ -27,11 +27,11 @@ def toggle_laser(turnOn):
     reset_servos()
     # laser.on() if turnOn else laser.off()
 
-def move_left(servo):
+def move_right(servo):
     if servo.angle > 0: 
         servo.angle -= 10
 
-def move_right(servo):
+def move_left(servo):
     if servo.angle < 180: 
         servo.angle += 10
 
@@ -41,9 +41,9 @@ def move_camera(direction):
     elif direction == "right":
         move_right(laser_x)
     elif direction == "up":
-        move_left(laser_y)
-    elif direction == "down":
         move_right(laser_y)
+    elif direction == "down":
+        move_left(laser_y)
 
 # def cord_to_pos(val):
 #     # 0 -> -1
@@ -63,6 +63,7 @@ def move_laser(x, y):
 
 def safe_close():
     print("Cleaning up...")
+    reset_servos()
     print("Goodbye!")
 
 app = Flask(__name__)
