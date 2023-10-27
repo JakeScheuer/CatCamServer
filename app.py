@@ -13,10 +13,10 @@ laser_x = kit.servo[0]
 laser_y = kit.servo[1]
 
 def reset_servos():
-    # cam_x.angle = 90
-    # time.sleep(0.2)
-    # cam_y.angle = 90
-    # time.sleep(0.2)
+    laser_x.angle = 90
+    time.sleep(0.2)
+    laser_y.angle = 90
+    time.sleep(0.2)
     cam_x.angle = 90
     time.sleep(0.2)
     cam_y.angle = 90
@@ -27,14 +27,14 @@ def toggle_laser(turnOn):
     reset_servos()
     # laser.on() if turnOn else laser.off()
 
-def move_right(servo):
+def decrease_angle(servo):
     if servo.angle is None or servo.angle > 0:
         try:
             servo.angle -= 10
         except ValueError:
             pass
 
-def move_left(servo):
+def increase_angle(servo):
     if servo.angle is None or servo.angle < 180:
         try: 
             servo.angle += 10
@@ -43,29 +43,35 @@ def move_left(servo):
 
 def move_camera(direction):
     if direction == "left":
-        move_left(cam_x)
+        increase_angle(cam_x)
     elif direction == "right":
-        move_right(cam_x)
+        decrease_angle(cam_x)
     elif direction == "up":
-        move_right(cam_y)
+        decrease_angle(cam_y)
     elif direction == "down":
-        move_left(cam_y)
+        increase_angle(cam_y)
 
-# def cord_to_pos(val):
-#     # 0 -> -1
-#     # 25 -> -0.5
-#     # 50 -> 0
-#     # 75 -> 0.5 
-#     # 100 -> 1
-#     return round(((val * 2)/100) - 1)
+def y_cord_to_angle(y_val):
+    # Top max = 0
+    # Bottom max = 100
+    # Top Max angle = 0
+    # Bottom Max angle = 180
+    angle = (y_val/100) * 180
+    return round(angle)
+
+def x_cord_to_angle(x_val):
+    # Left max = 0
+    # Right max = 100
+    # Left Max angle = 180
+    # Right Max angle = 0
+    angle = (x_val/180) * 100
+    return round(angle)
 
 # vals are 0-100
 def move_laser(x, y):
-    print(x)
-    print(y)
-    # laser_x.value = cord_to_pos(x)
-    # laser_y.value = cord_to_pos(y)
-    # time.sleep(0.1)
+    laser_x.angle = x_cord_to_angle(x)
+    laser_y.angle = y_cord_to_angle(y)
+    time.sleep(0.1)
 
 def safe_close():
     print("Cleaning up...")
