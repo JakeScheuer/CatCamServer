@@ -18,9 +18,11 @@ def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
 
 def move_left(servo):
+    print(servo.value)
     if servo.value > -1: servo.value -= 0.2 #0.01
 
 def move_right(servo):
+    print(servo.value)
     if servo.value < 1: servo.value += 0.2 #0.01
 
 # This may not be right...
