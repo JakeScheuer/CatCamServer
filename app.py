@@ -9,29 +9,25 @@ min_p = 0.05/1000
 max_p = 2.5/1000
 factory = PiGPIOFactory()
 laser = LED(2)
-cam_x = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-# laser_x = Servo(1, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-# laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+# cam_x = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+# cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_x = Servo("BOARD32", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_y = Servo("BOARD12", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+
+def test_servo(servo):
+    servo.min()
+    time.sleep(2)
+    servo.mid()
+    time.sleep(2)
+    servo.max()
+    time.sleep(2)
+    servo.mid()
+    time.sleep(2)
 
 def toggle_laser(turnOn):
     # Just to test...
-    cam_x.min()
-    time.sleep(2)
-    cam_x.mid()
-    time.sleep(2)
-    cam_x.max()
-    time.sleep(2)
-    cam_x.mid()
-    time.sleep(2)
-
-    cam_y.min()
-    time.sleep(2)
-    cam_y.mid()
-    time.sleep(2)
-    cam_y.max()
-    time.sleep(2)
-    cam_y.mid()
+    test_servo(laser_x)
+    test_servo(laser_y)
     # laser.on() if turnOn else laser.off()
 
 def move_left(servo):
