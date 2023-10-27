@@ -37,13 +37,13 @@ def move_right(servo):
 
 def move_camera(direction):
     if direction == "left":
-        move_left(cam_x)
+        move_left(laser_y)
     elif direction == "right":
-        move_right(cam_x)
+        move_right(laser_y)
     elif direction == "up":
-        move_left(cam_y)
+        move_left(laser_y)
     elif direction == "down":
-        move_right(cam_y)
+        move_right(laser_y)
 
 # def cord_to_pos(val):
 #     # 0 -> -1
