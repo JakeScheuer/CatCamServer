@@ -32,7 +32,7 @@ def test_servos():
 
 def toggle_laser(turnOn):
     # Just to test...
-    test_servo()
+    test_servos()
     # laser.on() if turnOn else laser.off()
 
 def move_left(servo):
