@@ -5,21 +5,14 @@ from gpiozero import LED, Servo
 from gpiozero.pins.pigpio import PiGPIOFactory
 import time
 
-# Just for reference...
-# LASER_PIN = 13
-# CAM_X_SERVO_PIN = 16
-# CAM_Y_SERVO_PIN = 15
-# LASER_X_SERVO_PIN = 11
-# LASER_Y_SERVO_PIN = 12
-
 min_p = 0.05/1000
 max_p = 2.5/1000
 factory = PiGPIOFactory()
 laser = LED("BOARD13")
-cam_x = Servo("BOARD16",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-cam_y = Servo("BOARD15",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_x = Servo("BOARD11",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_y = Servo("BOARD12",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_x = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_y = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_x = Servo("BOARD12",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+laser_y = Servo("BOARD32",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
 def toggle_laser(turnOn):
     laser.on() if turnOn else laser.off()
