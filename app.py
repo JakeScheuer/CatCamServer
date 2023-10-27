@@ -15,7 +15,24 @@ cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factor
 # laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
 def toggle_laser(turnOn):
-    laser.on() if turnOn else laser.off()
+    # Just to test...
+    cam_x.min()
+    sleep(2)
+    cam_x.mid()
+    sleep(2)
+    cam_x.max()
+    sleep(2)
+    cam_x.mid()
+    sleep(2)
+
+    cam_y.min()
+    sleep(2)
+    cam_y.mid()
+    sleep(2)
+    cam_y.max()
+    sleep(2)
+    cam_y.mid()
+    # laser.on() if turnOn else laser.off()
 
 def move_left(servo):
     print(servo.value)
@@ -42,19 +59,21 @@ def move_camera(direction):
     elif direction == "down":
         move_right(cam_y)
 
-def cord_to_pos(val):
-    # 0 -> -1
-    # 25 -> -0.5
-    # 50 -> 0
-    # 75 -> 0.5 
-    # 100 -> 1
-    return round(((val * 2)/100) - 1)
+# def cord_to_pos(val):
+#     # 0 -> -1
+#     # 25 -> -0.5
+#     # 50 -> 0
+#     # 75 -> 0.5 
+#     # 100 -> 1
+#     return round(((val * 2)/100) - 1)
 
 # vals are 0-100
 def move_laser(x, y):
+    print(x)
+    print(y)
     # laser_x.value = cord_to_pos(x)
     # laser_y.value = cord_to_pos(y)
-    time.sleep(0.1)
+    # time.sleep(0.1)
 
 def safe_close():
     print("Cleaning up...")
