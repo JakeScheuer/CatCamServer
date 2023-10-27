@@ -1,6 +1,6 @@
 flask
 flask-sock
 Werkzeug
-gpiozero
+adafruit-circuitpython-servokit
 picamera
 gunicorn

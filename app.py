@@ -1,36 +1,34 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
-from gpiozero import LED, Servo
-from gpiozero.pins.pigpio import PiGPIOFactory
+from adafruit_servokit import ServoKit
 import time
 
-min_p = 0.05/1000
-max_p = 2.5/1000
-factory = PiGPIOFactory()
-laser = LED(2)
-# cam_x = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-# cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_x = Servo("BOARD32", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-laser_y = Servo("BOARD12", min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+kit = ServoKit(channels=16)
 
-def test_servo():
-    laser_x.min()
+laser = kit.servo[4]
+cam_x = kit.servo[2]
+cam_y = kit.servo[3]
+laser_x = kit.servo[0]
+laser_y = kit.servo[1]
+
+def test_servos():
+    laser_x.angle = 180
     time.sleep(2)
-    laser_x.mid()
+    laser_x.angle = 90
     time.sleep(2)
-    laser_x.max()
+    laser_x.angle = 0
     time.sleep(2)
-    laser_x.mid()
+    laser_x.angle = 90
     time.sleep(2)
 
-    laser_y.min()
+    laser_y.angle = 180
     time.sleep(2)
-    laser_y.mid()
+    laser_y.angle = 90
     time.sleep(2)
-    laser_y.max()
+    laser_y.angle = 0
     time.sleep(2)
-    laser_y.mid()
+    laser_y.angle = 90
 
 def toggle_laser(turnOn):
     # Just to test...
@@ -38,19 +36,13 @@ def toggle_laser(turnOn):
     # laser.on() if turnOn else laser.off()
 
 def move_left(servo):
-    print(servo.value)
-    if servo.value > -0.7: 
-        servo.value -= 0.2 #0.01
+    if servo.angle > 0: 
+        servo.angle -= 10
 
 def move_right(servo):
     print(servo.value)
-    if servo.value < 0.7: 
-        servo.value += 0.2 #0.01
-
-# This may not be right...
-# def move_for_period(move_function):
-#     for x in range(20):
-#         move_function()
+    if servo.angle < 180: 
+        servo.angle += 10
 
 def move_camera(direction):
     if direction == "left":
@@ -80,15 +72,6 @@ def move_laser(x, y):
 
 def safe_close():
     print("Cleaning up...")
-    cam_x.mid()
-    cam_y.mid()
-    # laser_x.mid()
-    # laser_y.mid()
-    sleep(1)
-    cam_x.close()
-    cam_y.close()
-    laser_x.close()
-    laser_y.close()
     print("Goodbye!")
 
 app = Flask(__name__)
