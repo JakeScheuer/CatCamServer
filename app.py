@@ -19,13 +19,13 @@ def toggle_laser(turnOn):
 
 def move_left(servo):
     print(servo.value)
-    if round(servo.value) > -1: 
-        servo.value -= 1 #0.01
+    if servo.value > -0.7: 
+        servo.value -= 0.2 #0.01
 
 def move_right(servo):
     print(servo.value)
-    if round(servo.value) < 1: 
-        servo.value += 1 #0.01
+    if servo.value < 0.7: 
+        servo.value += 0.2 #0.01
 
 # This may not be right...
 # def move_for_period(move_function):
