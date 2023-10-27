@@ -9,8 +9,8 @@ min_p = 0.05/1000
 max_p = 2.5/1000
 factory = PiGPIOFactory()
 laser = LED(2)
-cam_x = Servo(23,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
-cam_y = Servo(24,min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_x = Servo("BOARD35",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
+cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 # laser_x = Servo(1, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 # laser_y = Servo(26, min_pulse_width=min_p, max_pulse_width=max_p, pin_factory=factory)
 
@@ -19,11 +19,13 @@ def toggle_laser(turnOn):
 
 def move_left(servo):
     print(servo.value)
-    if servo.value > -1: servo.value -= 0.2 #0.01
+    if round(servo.value) > -1: 
+        servo.value -= 1 #0.01
 
 def move_right(servo):
     print(servo.value)
-    if servo.value < 1: servo.value += 0.2 #0.01
+    if round(servo.value) < 1: 
+        servo.value += 1 #0.01
 
 # This may not be right...
 # def move_for_period(move_function):
