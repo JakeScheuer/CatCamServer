@@ -17,20 +17,20 @@ cam_y = Servo("BOARD33",min_pulse_width=min_p, max_pulse_width=max_p, pin_factor
 def toggle_laser(turnOn):
     # Just to test...
     cam_x.min()
-    sleep(2)
+    time.sleep(2)
     cam_x.mid()
-    sleep(2)
+    time.sleep(2)
     cam_x.max()
-    sleep(2)
+    time.sleep(2)
     cam_x.mid()
-    sleep(2)
+    time.sleep(2)
 
     cam_y.min()
-    sleep(2)
+    time.sleep(2)
     cam_y.mid()
-    sleep(2)
+    time.sleep(2)
     cam_y.max()
-    sleep(2)
+    time.sleep(2)
     cam_y.mid()
     # laser.on() if turnOn else laser.off()
 
