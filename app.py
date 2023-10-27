@@ -13,22 +13,14 @@ laser_x = kit.servo[0]
 laser_y = kit.servo[1]
 
 def test_servos():
-    laser_x.angle = 180
-    time.sleep(2)
-    laser_x.angle = 90
-    time.sleep(2)
     laser_x.angle = 0
-    time.sleep(2)
-    laser_x.angle = 90
-    time.sleep(2)
-
-    laser_y.angle = 180
-    time.sleep(2)
-    laser_y.angle = 90
     time.sleep(2)
     laser_y.angle = 0
     time.sleep(2)
-    laser_y.angle = 90
+    cam_x.angle = 0
+    time.sleep(2)
+    cam_y.angle = 0
+    time.sleep(2)
 
 def toggle_laser(turnOn):
     # Just to test...
