@@ -51,19 +51,10 @@ def move_camera(direction):
     elif direction == "down":
         increase_angle(cam_y)
 
-def y_cord_to_angle(y_val):
-    angle = (y_val/100) * 180
-    inverse_angle = abs(round(angle)-180)
-    return inverse_angle
-
-def x_cord_to_angle(x_val):
-    angle = (x_val/100) * 180
-    return round(angle)
-
 # vals are 0-100
 def move_laser(x, y):
-    laser_x.angle = x_cord_to_angle(x)
-    laser_y.angle = y_cord_to_angle(y)
+    laser_x.angle = x
+    laser_y.angle = y
     time.sleep(0.1)
 
 def safe_close():
@@ -108,7 +99,7 @@ def controls(ws):
         elif device == "move:":
             x_val = args[1].split(":")[1]
             y_val = args[2].split(":")[1]
-            move_laser(float(x_val), float(y_val))
+            move_laser(int(x_val), int(y_val))
 
 if __name__ == '__main__':
     try:
