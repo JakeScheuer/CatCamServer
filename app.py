@@ -52,7 +52,7 @@ def move_camera(direction):
         increase_angle(cam_y)
 
 def y_cord_to_angle(y_val):
-    angle = (x_val/100) * 180
+    angle = (y_val/100) * 180
     inverse_angle = abs(round(angle)-180)
     return inverse_angle
 
