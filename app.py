@@ -8,7 +8,7 @@ import atexit
 
 kit = ServoKit(channels=16)
 
-laser_pin = LED(20)
+laser_pin = LED(20, active_high=False)
 cam_x = kit.servo[2]
 cam_y = kit.servo[3]
 laser_x = kit.servo[0]
