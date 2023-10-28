@@ -15,13 +15,13 @@ laser_y = kit.servo[1]
 
 def reset_servos():
     laser_x.angle = 90
-    time.sleep(0.2)
-    laser_y.angle = 90
-    time.sleep(0.2)
+    time.sleep(0.5)
+    laser_y.angle = 45
+    time.sleep(0.5)
     cam_x.angle = 90
-    time.sleep(0.2)
-    cam_y.angle = 90
-    time.sleep(0.2)
+    time.sleep(0.5)
+    cam_y.angle = 45
+    time.sleep(0.5)
 
 def toggle_laser(turnOn):
     # Just to test...
