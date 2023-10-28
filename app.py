@@ -14,7 +14,7 @@ laser_x = kit.servo[0]
 laser_y = kit.servo[1]
 
 laser_pin.set_pulse_width_range(min_pulse=0, max_pulse=4096)
-
+laser_pin.fraction(value=1.0)
 def reset_servos():
     laser_x.angle = 90
     time.sleep(0.5)
