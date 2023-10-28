@@ -7,7 +7,7 @@ import atexit
 
 kit = ServoKit(channels=16)
 
-led_channel = kit.servo[4]
+led_channel = kit.continuous_servo[4]
 cam_x = kit.servo[2]
 cam_y = kit.servo[3]
 laser_x = kit.servo[0]
@@ -25,9 +25,9 @@ def reset_servos():
 
 def toggle_laser(turnOn):
     if turnOn:
-        led_channel.angle = 180
+        led_channel.throttle = 1
     else:
-        led_channel.duty_cycle = 0
+        led_channel.throttle = 0
 
 def decrease_angle(servo):
     if servo.angle is None or servo.angle > 0:
