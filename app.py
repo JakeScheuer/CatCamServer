@@ -3,6 +3,7 @@ from flask_sock import Sock
 from camera_pi import Camera
 from adafruit_servokit import ServoKit
 import time
+import atexit
 
 kit = ServoKit(channels=16)
 
@@ -110,3 +111,11 @@ if __name__ == '__main__':
     
     finally:
         safe_close()
+
+def cleanup():
+    try:
+        safe_close()
+    except Exception:
+        pass
+
+atexit.register(cleanup)

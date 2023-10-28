@@ -8,7 +8,8 @@ install() {
 }
 
 run() {
-    gunicorn -w 4 -b 0.0.0.0 app:app
+    activate
+    gunicorn -w 1 -b 0.0.0.0 app:app --timeout 90
 }
 
 createNew() {
