@@ -2,13 +2,13 @@ from flask import Flask, Response, request
 from flask_sock import Sock
 from camera_pi import Camera
 from adafruit_servokit import ServoKit
-from gpiozero import LED, PWMLED
+from gpiozero import LED
 import time
 import atexit
 
 kit = ServoKit(channels=16)
 
-laser_pin = PWMLED(20)
+laser_pin = LED(20)
 cam_x = kit.servo[2]
 cam_y = kit.servo[3]
 laser_x = kit.servo[0]
@@ -26,10 +26,9 @@ def reset_servos():
 
 def toggle_laser(turnOn):
     if turnOn:
-        laser_pin.pulse()
+        laser_pin.on()
     else:
-        laser_pin.value = 0
-
+        laser_pin.off()
 
 def decrease_angle(servo):
     if servo.angle is None or servo.angle > 0:
