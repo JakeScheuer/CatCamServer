@@ -1,10 +1,10 @@
 from flask import Flask, Response, request
 from flask_sock import Sock
-from camera_pi import Camera
 from adafruit_servokit import ServoKit
 from gpiozero import LED
 import time
 import atexit
+import cv2
 
 kit = ServoKit(channels=16)
 
@@ -14,6 +14,8 @@ cam_y = kit.servo[3]
 laser_x = kit.servo[0]
 laser_y = kit.servo[1]
 
+camera = cv2.VideoCapture(0)
+ 
 def reset_servos():
     laser_x.angle = 90
     time.sleep(0.5)
@@ -68,12 +70,18 @@ def safe_close():
 app = Flask(__name__)
 sock = Sock(app)
 
-def gen(camera):
+def generate_frames():
     while True:
-        frame = camera.get_frame()
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imnecode(.jpg, frame)
+            frame = camera.tobytes()
+
         yield (
             b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n--frame\r\n')
+            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
 @app.route('/')
@@ -82,7 +90,7 @@ def index():
 
 @app.route('/camera_feed')
 def video_feed():
-    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundry=frame')
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundry=frame')
 
 # laser: on, off
 # cam: left, right, up, down
