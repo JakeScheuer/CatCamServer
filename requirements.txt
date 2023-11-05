@@ -4,3 +4,4 @@ Werkzeug
 adafruit-circuitpython-servokit
 gpiozero
 gunicorn
+picamera

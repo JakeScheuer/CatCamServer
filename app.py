@@ -4,11 +4,9 @@ from adafruit_servokit import ServoKit
 from gpiozero import LED
 import time
 import atexit
-# from camera_pi import CameraP
-from opencv_camera import Camera
+from camera_pi import Camera
 
 kit = ServoKit(channels=16)
-
 laser_pin = LED(21,active_high=False)
 cam_x = kit.servo[2]
 cam_y = kit.servo[3]
