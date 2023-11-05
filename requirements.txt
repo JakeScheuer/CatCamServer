@@ -4,4 +4,5 @@ Werkzeug
 adafruit-circuitpython-servokit
 gpiozero
 gunicorn
-picamera
+opencv-python
+numpy
