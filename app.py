@@ -5,7 +5,7 @@ from gpiozero import LED
 import time
 import atexit
 # from camera_pi import CameraP
-from opencv_camera import CameraO
+from opencv_camera import Camera
 
 kit = ServoKit(channels=16)
 
@@ -82,7 +82,7 @@ def index():
 
 @app.route('/camera_feed')
 def video_feed():
-    return Response(gen(CameraO()), mimetype='multipart/x-mixed-replace; boundry=frame')
+    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundry=frame')
 
 # laser: on, off
 # cam: left, right, up, down
