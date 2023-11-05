@@ -79,7 +79,7 @@ def index():
     return 'Hello There!!!'
 
 @app.route('/video_test')
-def index():
+def video_test():
     """Video streaming home page."""
     return render_template('index.html')
 
