@@ -6,6 +6,8 @@ import time
 import atexit
 import cv2
 import numpy as np
+from webcam import WebcamVideoStream
+
 
 camera = cv2.VideoCapture(0)
 kit = ServoKit(channels=16)
@@ -69,26 +71,17 @@ def safe_close():
 app = Flask(__name__)
 sock = Sock(app)
 
-def gen_frames():  
+def gen(camera):
     while True:
-        success, frame = camera.read()  # read the camera frame
-        if not success:
+        if camera.stopped:
             break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+        frame = camera.read()
+        ret, jpeg = cv2.imencode('.jpg',frame)
+        if jpeg is not None:
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
-
-def gen():
-    capture = cv2.VideoCapture(0)
-    while True:
-        ret, frame = capture.read()
-        if ret == False:
-            continue
-        # encode the frame in JPEG format
-        encodedImage = cv2.imencode(".jpg", frame)
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.array(encodedImage)) + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+        else:
+            print("frame is none")
 
 @app.route('/')
 def index():
@@ -101,7 +94,8 @@ def video_test():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundry=frame')
+    return Response(gen(WebcamVideoStream().start()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # laser: on, off
 # cam: left, right, up, down
