@@ -4,7 +4,7 @@ from adafruit_servokit import ServoKit
 from gpiozero import LED
 import time
 import atexit
-from opencv_camera import Camera
+import cv2
 
 kit = ServoKit(channels=16)
 laser_pin = LED(21,active_high=False)
@@ -67,12 +67,15 @@ def safe_close():
 app = Flask(__name__)
 sock = Sock(app)
 
-def gen(camera):
-    """Video streaming generator function."""
-    yield b'--frame\r\n'
+def gen():
+    capture = cv2.VideoCapture(0)
     while True:
-        frame = camera.get_frame()
-        yield b'Content-Type: image/jpg\r\n\r\n' + frame + b'\r\n--frame\r\n'
+        ret, frame = capture.read()
+        if ret == False:
+            continue
+        # encode the frame in JPEG format
+        encodedImage = cv2.imencode(".jpg", frame)
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.array(encodedImage)) + b'\r\n')
 
 @app.route('/')
 def index():
@@ -85,7 +88,7 @@ def video_test():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundry=frame')
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundry=frame')
 
 # laser: on, off
 # cam: left, right, up, down
