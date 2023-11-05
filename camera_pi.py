@@ -4,7 +4,7 @@ import picamera
 from base_camera import BaseCamera
 
 
-class CameraP(BaseCamera):
+class Camera(BaseCamera):
     @staticmethod
     def frames():
         with picamera.PiCamera() as camera:
