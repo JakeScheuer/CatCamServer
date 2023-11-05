@@ -2,7 +2,7 @@ import os
 import cv2
 from base_camera import BaseCamera
 
-class CameraO(BaseCamera):
+class Camera(BaseCamera):
     video_source = 0
 
     def __init__(self):
