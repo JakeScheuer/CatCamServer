@@ -83,7 +83,7 @@ def video_test():
     """Video streaming home page."""
     return render_template('index.html')
 
-@app.route('/camera_feed')
+@app.route('/video_feed')
 def video_feed():
     return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundry=frame')
 
