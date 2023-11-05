@@ -4,7 +4,7 @@ from adafruit_servokit import ServoKit
 from gpiozero import LED
 import time
 import atexit
-from camera_pi import Camera
+from opencv_camera import Camera
 
 kit = ServoKit(channels=16)
 laser_pin = LED(21,active_high=False)
@@ -72,7 +72,7 @@ def gen(camera):
     yield b'--frame\r\n'
     while True:
         frame = camera.get_frame()
-        yield b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n--frame\r\n'
+        yield b'Content-Type: image/jpg\r\n\r\n' + frame + b'\r\n--frame\r\n'
 
 @app.route('/')
 def index():
