@@ -9,7 +9,6 @@ import numpy as np
 from webcam import WebcamVideoStream
 
 
-camera = cv2.VideoCapture(0)
 kit = ServoKit(channels=16)
 laser_pin = LED(21,active_high=False)
 cam_x = kit.servo[2]
