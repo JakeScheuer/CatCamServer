@@ -1,4 +1,4 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, render_template, request
 from flask_sock import Sock
 from adafruit_servokit import ServoKit
 from gpiozero import LED
@@ -77,6 +77,11 @@ def gen(camera):
 @app.route('/')
 def index():
     return 'Hello There!!!'
+
+@app.route('/video_test')
+def index():
+    """Video streaming home page."""
+    return render_template('index.html')
 
 @app.route('/camera_feed')
 def video_feed():
