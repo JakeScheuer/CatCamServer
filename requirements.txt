@@ -3,5 +3,4 @@ flask-sock
 Werkzeug
 adafruit-circuitpython-servokit
 gpiozero
-opencv-python
 gunicorn

@@ -1,6 +1,6 @@
 #!/bin/bash
 activate() {
-    source ~/.venv/arthur_api/bin/activate
+    source ~/.venv/cat_cam/bin/activate
 }
 
 install() {
@@ -13,7 +13,7 @@ run() {
 }
 
 createNew() {
-    python -m venv ~/.venv/arthur_api
+    python -m venv --system-site-packages ~/.venv/cat_cam
     activate
     install
     echo "To run use: ./scripts.sh run"
