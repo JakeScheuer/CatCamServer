@@ -76,7 +76,7 @@ def generate_frames():
         if not success:
             break
         else:
-            ret, buffer = cv2.imnecode('.jpg', frame)
+            ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
 
         yield (
