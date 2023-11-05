@@ -5,6 +5,7 @@ from gpiozero import LED
 import time
 import atexit
 import cv2
+import numpy as np
 
 kit = ServoKit(channels=16)
 laser_pin = LED(21,active_high=False)
