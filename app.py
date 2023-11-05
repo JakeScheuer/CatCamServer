@@ -14,8 +14,6 @@ cam_x = kit.servo[2]
 cam_y = kit.servo[3]
 laser_x = kit.servo[0]
 laser_y = kit.servo[1]
-
-camera = cv2.VideoCapture(0)
  
 def reset_servos():
     laser_x.angle = 90
